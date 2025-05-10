@@ -6,6 +6,7 @@ import Approval from '../pages/Approval';
 import Attendance from '../pages/Attendance';
 import Employee from '../pages/Employee';
 import Profile from '../pages/Profile';
+import Chat from '../pages/Chat';
 import PrivateRoute from './PrivateRoute';
 
 // 定义路由配置
@@ -41,6 +42,10 @@ export const routes: RouteObject[] = [
       {
         path: 'profile',
         element: <Profile />,
+      },
+      {
+        path: 'chat',
+        element: <Chat />,
       },
     ],
   },

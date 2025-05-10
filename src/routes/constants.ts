@@ -6,6 +6,7 @@ export const ROUTES = {
   EMPLOYEE: '/employee',
   PROFILE: '/profile',
   LOGIN: '/login',
+  CHAT: '/chat',
 } as const;
 
 // 路由配置类型
@@ -20,4 +21,5 @@ export const ROUTE_TITLES: Record<RouteKey, string> = {
   EMPLOYEE: '员工管理',
   PROFILE: '个人中心',
   LOGIN: '登录',
+  CHAT: '智能助手',
 }; 

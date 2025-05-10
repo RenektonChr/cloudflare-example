@@ -47,6 +47,11 @@ const MainLayout: React.FC = () => {
       icon: <UserOutlined />,
       label: ROUTE_TITLES.PROFILE,
     },
+    {
+      key: ROUTES.CHAT.slice(1),
+      icon: <DashboardOutlined />,
+      label: ROUTE_TITLES.CHAT,
+    },
   ];
 
   return (
