@@ -81,15 +81,10 @@ module.exports = {
     }),
   ].filter(Boolean),
   // 生产模式下启用缓存和模块连接以提高性能
-  cache: isDevelopment ? false : {
-    type: 'filesystem',
-  },
+  cache: false,
   optimization: {
-    concatenateModules: !isDevelopment,
-    // 添加生产环境优化
-    minimize: !isDevelopment,
-    splitChunks: !isDevelopment ? {
-      chunks: 'all',
-    } : false,
+    concatenateModules: false,
+    minimize: false,
+    splitChunks: false,
   },
 };

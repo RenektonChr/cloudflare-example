@@ -5,12 +5,13 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    ["@babel/plugin-transform-runtime"],
-    ["react-refresh/babel", { "skipEnvCheck": false }]
+    ["@babel/plugin-transform-runtime"]
   ],
   "env": {
-    "production": {
-      "plugins": []
+    "development": {
+      "plugins": [
+        ["react-refresh/babel", { "skipEnvCheck": false }]
+      ]
     }
   }
 }
