@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Card, Input, Button, Spin } from 'antd';
-// @ts-ignore
 import { request, gql } from 'graphql-request';
 
-const endpoint = 'https://your-graphql-endpoint.com/graphql'; // 替换为你的GraphQL地址
+const endpoint = 'https://chatgpt-graphql-worker.renektonchr.workers.dev/graphql'; // 替换为你的 Cloudflare Worker URL
 
-const CHAT_QUERY = gql`
-  query Chat($messages: [String!]!) {
-    chat(messages: $messages)
+const CHAT_MUTATION = gql`
+  mutation Chat($message: String!, $conversationId: ID) {
+    chat(message: $message, conversationId: $conversationId) {
+      id
+      text
+      conversationId
+    }
   }
 `;
 
@@ -21,6 +24,7 @@ const ChatGPTPanel: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -29,10 +33,12 @@ const ChatGPTPanel: React.FC = () => {
     setInput('');
     setLoading(true);
     try {
-      const res: { chat: string } = await request(endpoint, CHAT_QUERY, {
-        messages: newMessages.map(m => m.content),
+      const res: { chat: { id: string; text: string; conversationId: string } } = await request(endpoint, CHAT_MUTATION, {
+        message: input,
+        conversationId: conversationId,
       });
-      setMessages([...newMessages, { role: 'bot', content: res.chat }]);
+      setConversationId(res.chat.conversationId);
+      setMessages([...newMessages, { role: 'bot', content: res.chat.text }]);
     } catch (e) {
       setMessages([...newMessages, { role: 'bot', content: '出错了，请稍后再试。' }]);
     }
@@ -71,4 +77,4 @@ const ChatGPTPanel: React.FC = () => {
   );
 };
 
-export default ChatGPTPanel; 
+export default ChatGPTPanel;
