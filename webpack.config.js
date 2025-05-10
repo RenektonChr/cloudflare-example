@@ -3,13 +3,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+// 确保正确检测环境变量
 const isDevelopment = process.env.NODE_ENV !== 'production';
+console.log(`Building in ${isDevelopment ? 'development' : 'production'} mode`);
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.[contenthash].js',
+    filename: isDevelopment ? 'bundle.[fullhash].js' : 'bundle.[contenthash].js',
     clean: true,
     publicPath: '/',
   },
@@ -18,7 +20,7 @@ module.exports = {
   devServer: {
     static: path.join(__dirname, 'dist'),
     historyApiFallback: true,
-    hot: true,
+    hot: isDevelopment,
     port: 3000,
     open: true,
   },
@@ -34,7 +36,10 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              plugins: [isDevelopment && require.resolve('react-refresh/babel')].filter(Boolean),
+              // 确保React Refresh仅在开发模式下启用
+              plugins: [
+                isDevelopment && require.resolve('react-refresh/babel')
+              ].filter(Boolean),
               presets: [
                 '@babel/preset-env',
                 '@babel/preset-react',
@@ -66,13 +71,25 @@ module.exports = {
         PUBLIC_URL: '/public',
       },
     }),
+    // 确保MiniCssExtractPlugin在生产模式下启用
     !isDevelopment && new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
     }),
-    isDevelopment && new ReactRefreshWebpackPlugin(),
+    // 确保ReactRefreshWebpackPlugin仅在开发模式下启用
+    isDevelopment && new ReactRefreshWebpackPlugin({
+      overlay: false, // 可以禁用错误覆盖层，避免某些问题
+    }),
   ].filter(Boolean),
-  cache: false,
-  optimization: {
-    concatenateModules: false,
+  // 生产模式下启用缓存和模块连接以提高性能
+  cache: isDevelopment ? false : {
+    type: 'filesystem',
   },
-}; 
+  optimization: {
+    concatenateModules: !isDevelopment,
+    // 添加生产环境优化
+    minimize: !isDevelopment,
+    splitChunks: !isDevelopment ? {
+      chunks: 'all',
+    } : false,
+  },
+};
