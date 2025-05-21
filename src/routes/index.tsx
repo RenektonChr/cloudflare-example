@@ -7,6 +7,7 @@ import Attendance from '../pages/Attendance';
 import Employee from '../pages/Employee';
 import Profile from '../pages/Profile';
 import Chat from '../pages/Chat';
+import AIAgent from '../pages/AIAgent';
 import PrivateRoute from './PrivateRoute';
 
 // 定义路由配置
@@ -46,6 +47,10 @@ export const routes: RouteObject[] = [
       {
         path: 'chat',
         element: <Chat />,
+      },
+      {
+        path: 'ai-agent',
+        element: <AIAgent />,
       },
     ],
   },

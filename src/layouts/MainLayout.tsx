@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   CalendarOutlined,
   DashboardOutlined,
+  RobotOutlined,
 } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { ROUTES, ROUTE_TITLES } from '../routes/constants';
@@ -51,6 +52,11 @@ const MainLayout: React.FC = () => {
       key: ROUTES.CHAT.slice(1),
       icon: <DashboardOutlined />,
       label: ROUTE_TITLES.CHAT,
+    },
+    {
+      key: ROUTES.AI_AGENT.slice(1),
+      icon: <RobotOutlined />,
+      label: ROUTE_TITLES.AI_AGENT,
     },
   ];
 
